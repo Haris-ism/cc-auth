@@ -19,7 +19,9 @@ type (
 	PostgreInterface interface {
 		Insert(req models.ItemList) error
 		Query() ([]models.ItemList, error)
-		Register(req auth.Credentials)error
+		EmailQuery(req auth.Credentials)(dbs.Credentials,error)
+		CreateCredentials(cred dbs.Credentials)error
+		Login(req auth.Credentials) error
 	}
 )
 

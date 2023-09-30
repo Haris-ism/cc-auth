@@ -18,6 +18,7 @@ type (
 		InsertDB(req models.ItemList) error
 		QueryDB() ([]models.ItemList, error)
 		Register(req auth.Credentials) error
+		Login (req auth.Credentials)(string,error)
 	}
 )
 

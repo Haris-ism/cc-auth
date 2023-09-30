@@ -17,6 +17,7 @@ type (
 		InsertPostgre(ctx *gin.Context)
 		QueryPostgre(ctx *gin.Context)
 		Register(ctx *gin.Context)
+		Login(ctx *gin.Context)
 	}
 )
 
