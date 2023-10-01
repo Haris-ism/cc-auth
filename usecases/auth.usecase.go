@@ -12,7 +12,7 @@ import (
 )
 
 func (uc *usecase) Register(req models.Credentials) error{
-	cred,err:=uc.postgre.EmailQuery(req)
+	cred,err:=uc.postgre.EmailQuery(req.Email)
 
 	if err!=nil{
 		return err
@@ -41,7 +41,7 @@ func (uc *usecase) Register(req models.Credentials) error{
 }
 
 func (uc *usecase)Login (req models.Credentials)(string,error){
-	cred,err:=uc.postgre.EmailQuery(req)
+	cred,err:=uc.postgre.EmailQuery(req.Email)
 	
 	if err!=nil{
 		return "",err

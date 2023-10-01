@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	auth "cc-auth/controllers/models"
+	cons "cc-auth/controllers/models"
 	postgre "cc-auth/databases/postgresql"
 	redis_db "cc-auth/databases/redis"
 	"cc-auth/models"
@@ -17,8 +17,10 @@ type (
 		ReadRedis(req models.RedisReq) (string, error)
 		InsertDB(req models.ItemList) error
 		QueryDB() ([]models.ItemList, error)
-		Register(req auth.Credentials) error
-		Login (req auth.Credentials)(string,error)
+		Register(req cons.Credentials) error
+		Login (req cons.Credentials)(string,error)
+		AddCC(req cons.ReqCC)error
+		TopUpCC(req cons.ReqCC)error
 	}
 )
 

@@ -6,9 +6,9 @@ import (
 	dbs "cc-auth/databases/postgresql/models"
 )
 
-func (db *postgreDB) EmailQuery(req models.Credentials)(dbs.Credentials,error){
+func (db *postgreDB) EmailQuery(email string)(dbs.Credentials,error){
 	cred:=dbs.Credentials{}
-	err:=db.postgre.Where("email = ?",req.Email).Find(&cred).Error
+	err:=db.postgre.Where("email = ?",email).Find(&cred).Error
 
 	if err!=nil{
 		return cred,err

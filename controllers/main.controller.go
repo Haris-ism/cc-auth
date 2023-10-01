@@ -18,6 +18,8 @@ type (
 		QueryPostgre(ctx *gin.Context)
 		Register(ctx *gin.Context)
 		Login(ctx *gin.Context)
+		AddCC(ctx *gin.Context)
+		TopUpCC(ctx *gin.Context)
 	}
 )
 

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"cc-auth/constants"
 	auth "cc-auth/controllers/models"
 	"cc-auth/models"
 	"net/http"
@@ -10,14 +11,14 @@ import (
 
 func (c *controller) Register(ctx *gin.Context) {
 	res := models.GeneralResponse{
-		Message: "Success",
-		Code:    200,
+		Message: constants.SUCCESS,
+		Code:    http.StatusOK,
 	}
 	req := auth.Credentials{}
 
 	if err := ctx.BindJSON(&req); err != nil {
-		res.Message = "Invalid Input"
-		res.Code = 400
+		res.Message = constants.INVALID_INPUT
+		res.Code = http.StatusBadRequest
 		ctx.JSON(http.StatusOK, res)
 		return
 	}
@@ -34,13 +35,13 @@ func (c *controller) Register(ctx *gin.Context) {
 
 func (c *controller)Login(ctx *gin.Context){
 	res:=models.GeneralResponse{
-		Message: "Success",
+		Message: constants.SUCCESS,
 		Code:http.StatusOK,
 	}
 	req:=auth.Credentials{}
 
 	if err:=ctx.BindJSON(&req);err!=nil{
-		res.Message="Invalid Credentials"
+		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
 		ctx.JSON(http.StatusBadRequest,res)
 	}

@@ -20,6 +20,8 @@ func MainRouter(con controller.ControllerInterface) {
 	v2 := r.Group("v2")
 	v2.POST("/register", con.Register)
 	v2.POST("/login", con.Login)
+	v2.POST("/add-credit-cards",con.AddCC)
+	v2.POST("/top-up-credit-cards",con.TopUpCC)
 
 	logrus.Info("starts")
 	r.Run(utils.GetEnv("PORT"))
