@@ -36,3 +36,47 @@ func (dbs *postgreDB) Login(req models.Credentials) error{
 
 	return nil
 }
+
+func (db *postgreDB)AddCC(cc dbs.CreditCards)error{
+	err:=db.postgre.Create(&cc).Error
+	if err!=nil{
+		return err
+	}
+	return nil
+}
+
+func (db *postgreDB)QueryEmailCC(email string)(dbs.CreditCards,error){
+	cc:=dbs.CreditCards{}
+	err:=db.postgre.Where("creds_email = ?",email).Find(&cc).Error
+	if err!=nil{
+		return cc,err
+	}
+	return cc,nil
+}
+
+func (db *postgreDB)QueryIDCC(id int)(dbs.CreditCards,error){
+	cred:=dbs.CreditCards{}
+	err:=db.postgre.Where("ID = ?", id).Find(&cred).Error
+	if err!=nil{
+		return cred,err
+	}
+	return cred,nil
+}
+
+func (db *postgreDB)DelCC(id int)error{
+	cred:=dbs.CreditCards{}
+	err:=db.postgre.Where("ID = ?",id).Delete(&cred).Error
+	if err!=nil{
+		return err
+	}
+	return nil
+}
+
+func (db *postgreDB)GetCC()([]dbs.CreditCards,error){
+	cred:=[]dbs.CreditCards{}
+	err:=db.postgre.Find(&cred).Error
+	if err!=nil{
+		return cred,err
+	}
+	return cred,nil
+}

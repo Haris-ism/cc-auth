@@ -54,3 +54,19 @@ func (c *controller)TopUpCC(ctx *gin.Context){
 	}
 	ctx.JSON(http.StatusOK,res)
 }
+
+func (c *controller)GetCC(ctx *gin.Context){
+	res:=models.GeneralResponse{
+		Message: constants.SUCCESS,
+		Code:http.StatusOK,
+	}
+	cred,err:=c.usecase.GetCC()
+	if err!=nil{
+		res.Message=err.Error()
+		res.Code=http.StatusInternalServerError
+		ctx.JSON(http.StatusInternalServerError,res)
+		return
+	}
+	res.Data=cred
+	ctx.JSON(http.StatusOK,res)
+}

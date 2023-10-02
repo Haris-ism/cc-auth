@@ -20,6 +20,8 @@ type (
 		Login(ctx *gin.Context)
 		AddCC(ctx *gin.Context)
 		TopUpCC(ctx *gin.Context)
+		GetCC(ctx *gin.Context)
+		DelCC(ctx *gin.Context)
 	}
 )
 

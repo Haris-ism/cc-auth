@@ -3,6 +3,7 @@ package usecase
 import (
 	cons "cc-auth/controllers/models"
 	postgre "cc-auth/databases/postgresql"
+	trans "cc-auth/databases/postgresql/models"
 	redis_db "cc-auth/databases/redis"
 	"cc-auth/models"
 )
@@ -21,6 +22,8 @@ type (
 		Login (req cons.Credentials)(string,error)
 		AddCC(req cons.ReqCC)error
 		TopUpCC(req cons.ReqCC)error
+		GetCC()([]trans.CreditCards,error)
+		DelCC(id string)error
 	}
 )
 

@@ -2,8 +2,8 @@ package controller
 
 import (
 	"cc-auth/constants"
+	"cc-auth/controllers/models"
 	auth "cc-auth/controllers/models"
-	"cc-auth/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -44,6 +44,7 @@ func (c *controller)Login(ctx *gin.Context){
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
 		ctx.JSON(http.StatusBadRequest,res)
+		return
 	}
 
 	token,err:=c.usecase.Login(req)
@@ -56,5 +57,21 @@ func (c *controller)Login(ctx *gin.Context){
 	}
 
 	res.Data=token
+	ctx.JSON(http.StatusOK,res)
+}
+
+func (c *controller)DelCC(ctx *gin.Context){
+	id:=ctx.Param("id")
+	res:=models.GeneralResponse{
+		Message:constants.SUCCESS,
+		Code:http.StatusOK,
+	}
+	err:=c.usecase.DelCC(id)
+	if err!=nil{
+		res.Message=err.Error()
+		res.Code=http.StatusBadRequest
+		ctx.JSON(http.StatusBadRequest,res)
+		return
+	}
 	ctx.JSON(http.StatusOK,res)
 }

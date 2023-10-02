@@ -25,6 +25,9 @@ type (
 		AddCC(cc dbs.CreditCards) error
 		QueryEmailCC(email string)(dbs.CreditCards,error)
 		TopUpCC(cred dbs.CreditCards)error
+		GetCC()([]dbs.CreditCards,error)
+		QueryIDCC(id int)(dbs.CreditCards,error)
+		DelCC(id int)error
 	}
 )
 
