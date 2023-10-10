@@ -11,6 +11,7 @@ import (
 
 func MainRouter(con controller.ControllerInterface) {
 	r := gin.Default()
+	r.Use(middleware.CorsMiddleware)
 	v1 := r.Group("v1")
 	v1.GET("/ping", con.Ping)
 	v1.POST("/writeredis", con.WriteRedis)
