@@ -6,6 +6,7 @@ import (
 	trans "cc-auth/databases/postgresql/models"
 	"cc-auth/utils"
 	"errors"
+	"net/http"
 )
 
 
@@ -71,4 +72,15 @@ func (uc *usecase)GetCC()([]trans.CreditCards,error){
 		return cred,errors.New(constants.ERROR_DB)
 	}
 	return cred,nil
+}
+
+func (uc *usecase)TransItem(req models.ReqItems)(string,error){
+	header := make(http.Header)
+	header.Add("Accept", "*/*")
+	header.Add("Content-Type", "application/json")
+	// _,bytes,err:=uc.host.Callback().Send("",req,header)
+	// if err!=nil{
+	// 	return "",errors.New(constants.ERROR_DB)
+	// }
+	return "",nil
 }

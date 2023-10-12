@@ -22,6 +22,9 @@ type (
 		TopUpCC(ctx *gin.Context)
 		GetCC(ctx *gin.Context)
 		DelCC(ctx *gin.Context)
+		TransItem(ctx *gin.Context)
+		InquiryItems(ctx *gin.Context)
+		InquiryDiscounts(ctx *gin.Context)
 	}
 )
 

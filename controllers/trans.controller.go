@@ -70,3 +70,25 @@ func (c *controller)GetCC(ctx *gin.Context){
 	res.Data=cred
 	ctx.JSON(http.StatusOK,res)
 }
+
+func (c *controller)TransItem(ctx *gin.Context){
+	res:=models.GeneralResponse{
+		Message: constants.SUCCESS,
+		Code:http.StatusOK,
+	}
+	req:=models.ReqItems{}
+	if err:=ctx.BindJSON(&req);err!=nil{
+		res.Message=constants.INVALID_INPUT
+		res.Code=http.StatusBadRequest
+		ctx.JSON(http.StatusBadRequest,res)
+		return
+	}
+	_,err:=c.usecase.TransItem(req)
+	if err!=nil{
+		res.Message=err.Error()
+		res.Code=http.StatusInternalServerError
+		ctx.JSON(http.StatusInternalServerError,res)
+		return
+	}
+	ctx.JSON(res.Code,res)
+}

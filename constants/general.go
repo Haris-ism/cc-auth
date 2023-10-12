@@ -9,4 +9,7 @@ const(
 	EMAIL_REGISTERED="Email Already Registered"
 	ERROR_DB="Database Error"
 	ERROR_TOKEN="Invalid Token"
+	ERROR_INQUIRY="Invalid Inquiry"
+	ERROR_ITEMS="Items Already Registered"
+	ERROR_DISCOUNTS="Discounts Already Registered"
 )
