@@ -2,7 +2,6 @@ package utils
 
 import (
 	"cc-auth/constants"
-	"fmt"
 	"net/http"
 
 	"github.com/parnurzeal/gorequest"
@@ -14,6 +13,7 @@ func HTTPRequest(url string, method string, body interface{}, header http.Header
 		data []byte
 		err error
 	)
+	
 	switch method{
 		case constants.HTTP_GET:
 			res,data,err=HTTPGET(url, header)
@@ -35,11 +35,17 @@ func HTTPGET(url string, header http.Header)(gorequest.Response,[]byte,error){
 	if err!=nil{
 		return res,[]byte(data),err[0]
 	}
-	fmt.Println("ieu data:",data)
 	return res,[]byte(data),nil
 }
 func HTTPPOST(url string,body interface{}, header http.Header)(gorequest.Response,[]byte,error){
-	return nil,nil,nil
+	request:=gorequest.New()
+	request.SetDebug(true)
+	request.Header=header
+	res,data,err:=request.Post(url).Send(body).End()
+	if err!=nil{
+		return res,[]byte(data),err[0]
+	}
+	return res,[]byte(data),nil
 }
 func HTTPPUT(url string,body interface{}, header http.Header)(gorequest.Response,[]byte,error){
 	return nil,nil,nil

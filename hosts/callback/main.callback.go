@@ -40,8 +40,8 @@ func (h *callback)Send(types string, body interface{},header http.Header)(gorequ
 
 func InitCallback()CallbackInterface{
 	return &callback{
-		callbackHost:utils.GetEnv("MERCHANT_HOST"),
-		inquiryItems: utils.GetEnv("MERCHANT_INQUIRY_ITEMS"),
-		inquiryDiscounts: utils.GetEnv("MERCHANT_INQUIRY_DISCOUNTS"),
+		callbackHost:utils.GetEnv("CALLBACK_HOST"),
+		inquiryItems: utils.GetEnv("CALLBACK_INQUIRY_ITEMS"),
+		inquiryDiscounts: utils.GetEnv("CALLBACK_INQUIRY_DISCOUNTS"),
 	}
 }

@@ -7,6 +7,7 @@ import (
 	redis_db "cc-auth/databases/redis"
 	host "cc-auth/hosts"
 	cb "cc-auth/hosts/callback/models"
+	tModels "cc-auth/hosts/transaction/models"
 	"cc-auth/models"
 )
 
@@ -28,9 +29,9 @@ type (
 		TopUpCC(req cons.ReqCC)error
 		GetCC()([]trans.CreditCards,error)
 		DelCC(id string)error
-		TransItem(req cons.ReqItems)(string,error)
 		InquiryItems()([]cb.InquiryItems,error)
 		InquiryDiscounts()([]cb.InquiryDiscounts,error)
+		TransItem(req tModels.TransactionItems)([]tModels.ResponseItems,error)
 	}
 )
 
