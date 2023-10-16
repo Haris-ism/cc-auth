@@ -1,6 +1,6 @@
 package constants
 
-const(
+const (
 	INQUIRY_ITEMS="InquiryItems"
 	INQUIRY_DISCOUNTS="InquiryDiscounts"
 	TRANSACTION_ITEMS="TransactionItems"

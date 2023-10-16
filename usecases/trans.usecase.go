@@ -87,11 +87,11 @@ func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.ResponseItems,
 		return result.Data, errors.New(constants.ERROR_DB)
 	}
 	if res.StatusCode!=200{
-		return result.Data, errors.New(constants.ERROR_INQUIRY)
+		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
 	err=json.Unmarshal(bytes,&result)
 	if err!=nil{
-		return result.Data, errors.New(constants.ERROR_INQUIRY)
+		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
 	return result.Data,nil
 }

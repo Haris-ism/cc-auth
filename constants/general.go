@@ -12,4 +12,6 @@ const(
 	ERROR_INQUIRY="Invalid Inquiry"
 	ERROR_ITEMS="Items Already Registered"
 	ERROR_DISCOUNTS="Discounts Already Registered"
+	ERROR_REQUEST_FAILED="Request Failed"
+
 )
