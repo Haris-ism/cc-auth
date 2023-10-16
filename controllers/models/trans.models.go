@@ -10,11 +10,16 @@ type ReqCC struct{
 	Email			string			`json:"email"`
 }
 
-type ReqItems struct {
-	gorm.Model
-	CC_Number		string			`json:"cc_number"`
-	CVV				string			`json:"cvv"`
-	Item			string			`json:"item"`
-	Discount		string			`json:"discount"`
-	Quantity		string			`json:"quantity"`
+type TransactionItems struct{
+	ItemID			int			`json:"item_id"`
+	Discount		string		`json:"discount"`
+	Quantity		int			`json:"quantity"`
+	CCNumber		string		`json:"cc_number"`
+	CVV				string		`json:"cvv"`
+	Amount			int			`json:"amount"`
+	Price			int			`json:"price"`
+	Name			string		`json:"name"`
+	Type			string		`json:"type"`
+	Percentage		int			`json:"percentage"`
 }
+

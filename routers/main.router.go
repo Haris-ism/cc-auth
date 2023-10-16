@@ -6,7 +6,6 @@ import (
 	"cc-auth/utils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func MainRouter(con controller.ControllerInterface) {
@@ -40,7 +39,5 @@ func MainRouter(con controller.ControllerInterface) {
 		}
 	}
 
-
-	logrus.Info("starts")
 	r.Run(utils.GetEnv("PORT"))
 }

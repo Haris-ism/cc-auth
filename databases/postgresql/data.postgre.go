@@ -2,7 +2,6 @@ package postgre
 
 import (
 	"cc-auth/models"
-	"fmt"
 
 	"github.com/sirupsen/logrus"
 )
@@ -21,6 +20,5 @@ func (db *postgreDB) Query() ([]models.ItemList, error) {
 		logrus.Errorf("Failed to Insert Postgre, Err:", err)
 		return result, err
 	}
-	fmt.Println("ieu res:", &result)
 	return result, nil
 }

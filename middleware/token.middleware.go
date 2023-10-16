@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"reflect"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/sirupsen/logrus"
 )
 
 func TokenAuth(ctx *gin.Context){
@@ -19,6 +19,7 @@ func TokenAuth(ctx *gin.Context){
 	ReqHeader:=models.ReqHeader{}
 	err:=ctx.BindHeader(&ReqHeader)
 	if err!=nil{
+		logrus.Error("err:",err)
 		res.Message=constants.ERROR_TOKEN
 		res.Code=http.StatusBadRequest
 		ctx.JSON(http.StatusBadRequest,res)
@@ -26,6 +27,7 @@ func TokenAuth(ctx *gin.Context){
 		return
 	}
 	if strings.HasPrefix(ReqHeader.Authorization, "Bearer ") == false {
+		logrus.Error("err: invalid token",)
 		res.Message="Invalid Token"
 		res.Code=http.StatusForbidden
 		ctx.JSON(http.StatusForbidden, res)
@@ -38,7 +40,6 @@ func TokenAuth(ctx *gin.Context){
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-
 		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
 		return []byte(os.Getenv("JWT")), nil
 	})
@@ -46,15 +47,16 @@ func TokenAuth(ctx *gin.Context){
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			res.Message="Token Expired"
+			logrus.Error("err:",res.Message)
 			res.Code=http.StatusForbidden
 			ctx.JSON(http.StatusForbidden, res)
 			ctx.Abort()
 			return
 		}
 	} else {
-		fmt.Println(err, reflect.TypeOf(err), reflect.ValueOf(err).Kind())
 		res.Message="Token Error"
 		res.Code=http.StatusForbidden
+		logrus.Error("err:",res.Message)
 		ctx.JSON(http.StatusForbidden, res)
 		ctx.Abort()
 		return

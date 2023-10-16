@@ -5,7 +5,6 @@ import (
 	"cc-auth/controllers/models"
 	trans "cc-auth/databases/postgresql/models"
 	tModels "cc-auth/hosts/transaction/models"
-	"fmt"
 
 	"cc-auth/utils"
 	"encoding/json"
@@ -78,12 +77,11 @@ func (uc *usecase)GetCC()([]trans.CreditCards,error){
 	return cred,nil
 }
 
-func (uc *usecase)TransItem(req tModels.TransactionItems)([]tModels.ResponseItems,error){
+func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.ResponseItems,error){
 	result:=tModels.ResponseTransactionItems{}
 	header := make(http.Header)
 	header.Add("Accept", "*/*")
 	header.Add("Content-Type", "application/json")
-	fmt.Println("req:",req)
 	res,bytes,err:=uc.host.Transaction().Send(constants.TRANSACTION_ITEMS,req,header)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_DB)
