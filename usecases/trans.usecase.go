@@ -10,6 +10,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
 
@@ -77,11 +79,17 @@ func (uc *usecase)GetCC()([]trans.CreditCards,error){
 	return cred,nil
 }
 
-func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.ResponseItems,error){
+func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,error){
 	result:=tModels.ResponseTransactionItems{}
 	header := make(http.Header)
 	header.Add("Accept", "*/*")
 	header.Add("Content-Type", "application/json")
+
+	req,err:=utils.EncryptTransItem(req)
+	if err!=nil{
+		return result.Data, err
+	}
+	
 	res,bytes,err:=uc.host.Transaction().Send(constants.TRANSACTION_ITEMS,req,header)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_DB)
@@ -89,9 +97,19 @@ func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.ResponseItems,
 	if res.StatusCode!=200{
 		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
-	err=json.Unmarshal(bytes,&result)
+	resHost:=tModels.ResHostTransactionItems{}
+	err=json.Unmarshal(bytes,&resHost)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
-	return result.Data,nil
+
+	ress,err:=utils.DecryptTransItemRes(resHost.Data)
+	if err!=nil{
+		logrus.Error(err)
+		return result.Data, err
+	}
+
+	return ress,nil
 }
+
+

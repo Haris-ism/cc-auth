@@ -61,6 +61,7 @@ func (c *controller)GetCC(ctx *gin.Context){
 		Message: constants.SUCCESS,
 		Code:http.StatusOK,
 	}
+
 	cred,err:=c.usecase.GetCC()
 	if err!=nil{
 		res.Message=err.Error()

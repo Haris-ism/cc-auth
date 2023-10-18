@@ -31,7 +31,7 @@ type (
 		DelCC(id string)error
 		InquiryItems()([]cb.InquiryItems,error)
 		InquiryDiscounts()([]cb.InquiryDiscounts,error)
-		TransItem(req tModels.TransactionItems)(tModels.ResponseItems,error)
+		TransItem(req tModels.TransactionItems)(tModels.DecTransItem,error)
 	}
 )
 
