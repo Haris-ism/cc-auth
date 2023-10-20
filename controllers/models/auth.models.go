@@ -7,4 +7,6 @@ type Credentials struct {
 
 type ReqHeader struct{
 	Authorization	string	`json:"Authorization"`
+	TimeStamp		string	`json:"TimeStamp"`
+	Signature		string	`json:"Signature"`
 }

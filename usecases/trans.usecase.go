@@ -5,9 +5,11 @@ import (
 	"cc-auth/controllers/models"
 	trans "cc-auth/databases/postgresql/models"
 	tModels "cc-auth/hosts/transaction/models"
+	"cc-auth/middleware"
+	"encoding/json"
+	"time"
 
 	"cc-auth/utils"
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -80,16 +82,23 @@ func (uc *usecase)GetCC()([]trans.CreditCards,error){
 }
 
 func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,error){
+	timeStamp:=time.Now().Format("15:04:05")
 	result:=tModels.ResponseTransactionItems{}
-	header := make(http.Header)
-	header.Add("Accept", "*/*")
-	header.Add("Content-Type", "application/json")
-
 	req,err:=utils.EncryptTransItem(req)
 	if err!=nil{
 		return result.Data, err
 	}
-	
+	bytes,err:=json.Marshal(req)
+	if err!=nil{
+		return result.Data,err
+	}
+
+	signature:=middleware.Signature(string(bytes),timeStamp)
+	header := make(http.Header)
+	header.Add("Accept", "*/*")
+	header.Add("Content-Type", "application/json")
+	header.Add("TimeStamp", timeStamp)
+	header.Add("Signature", signature)
 	res,bytes,err:=uc.host.Transaction().Send(constants.TRANSACTION_ITEMS,req,header)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_DB)
@@ -103,13 +112,13 @@ func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,e
 		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
 
-	ress,err:=utils.DecryptTransItemRes(resHost.Data)
+	resp,err:=utils.DecryptTransItemRes(resHost.Data)
 	if err!=nil{
 		logrus.Error(err)
 		return result.Data, err
 	}
 
-	return ress,nil
+	return resp,nil
 }
 
 

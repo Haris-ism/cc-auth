@@ -78,6 +78,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 		Message: constants.SUCCESS,
 		Code:http.StatusOK,
 	}
+
 	req:=hModels.TransactionItems{}
 	if err:=ctx.BindJSON(&req);err!=nil{
 		res.Message=constants.INVALID_INPUT
@@ -85,6 +86,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 		ctx.JSON(http.StatusBadRequest,res)
 		return
 	}
+
 	data,err:=c.usecase.TransItem(req)
 	if err!=nil{
 		res.Message=err.Error()
