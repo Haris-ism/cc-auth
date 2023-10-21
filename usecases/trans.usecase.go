@@ -101,17 +101,17 @@ func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,e
 	header.Add("Signature", signature)
 	res,bytes,err:=uc.host.Transaction().Send(constants.TRANSACTION_ITEMS,req,header)
 	if err!=nil{
-		return result.Data, errors.New(constants.ERROR_DB)
-	}
-	if res.StatusCode!=200{
 		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
+	
 	resHost:=tModels.ResHostTransactionItems{}
 	err=json.Unmarshal(bytes,&resHost)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
-
+	if res.StatusCode!=200{
+		return result.Data, errors.New(resHost.Message)
+	}
 	resp,err:=utils.DecryptTransItemRes(resHost.Data)
 	if err!=nil{
 		logrus.Error(err)

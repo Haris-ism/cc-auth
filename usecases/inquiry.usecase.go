@@ -35,12 +35,12 @@ func (uc *usecase)InquiryDiscounts()([]models.InquiryDiscounts,error){
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_DB)
 	}
-	if res.StatusCode!=200{
-		return result.Data, errors.New(constants.ERROR_INQUIRY)
-	}
 	err=json.Unmarshal(data,&result)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_INQUIRY)
+	}
+	if res.StatusCode!=200{
+		return result.Data, errors.New(result.Message)
 	}
 	return result.Data, nil
 }
