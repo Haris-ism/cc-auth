@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  postgre:
+    image: postgres:14.9-alpine3.18
+    container_name: postgre
+    healthcheck:
+      #CHANGE 1: this command checks if the database is ready, right on the source db server
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+  redis:
+    image: redis:alpine3.18
+    container_name: redis
+    ports:
+      - "6378:6379"
+  backend:
+    container_name: cc-auth
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      postgre: 
+        condition: service_healthy
+    ports:
+      - "9999:9999"

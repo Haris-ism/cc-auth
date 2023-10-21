@@ -1,10 +1,9 @@
 FROM golang:1.19-alpine3.16 AS builder
-
 WORKDIR /app
-
-COPY ./cc-auth .
-
-RUN go build
+RUN apk add alpine-sdk
+COPY . .
+# RUN go mod download
+RUN go build -o cc-auth
 
 FROM alpine:3.16
 
@@ -15,8 +14,8 @@ RUN apk update && apk add --no-cache tzdata
 ENV TZ="Asia/Jakarta"
 
 COPY --from=builder /app/cc-auth .
-COPY cc-auth/.env .
+COPY .env .
 
-EXPOSE 8888
+EXPOSE 9999
 
 ENTRYPOINT [ "/app/cc-auth" ]
