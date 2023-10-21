@@ -13,15 +13,15 @@ func (uc *usecase)InquiryItems()([]models.InquiryItems,error){
 	header := make(http.Header)
 	header.Add("Accept", "*/*")
 	header.Add("Content-Type", "application/json")
-	res,data,err:=uc.host.Callback().Send(constants.INQUIRY_ITEMS,"",header)
+	_,data,err:=uc.host.Callback().Send(constants.INQUIRY_ITEMS,"",header)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_DB)
 	}
-	if res.StatusCode!=200{
-		return result.Data, errors.New(constants.ERROR_INQUIRY)
-	}
 	err=json.Unmarshal(data,&result)
 	if err!=nil{
+		return result.Data, errors.New(constants.ERROR_INQUIRY)
+	}
+	if result.Code!=200{
 		return result.Data, errors.New(constants.ERROR_INQUIRY)
 	}
 	return result.Data, nil
