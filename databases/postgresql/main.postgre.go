@@ -22,7 +22,7 @@ type (
 		EmailQuery(email string)(dbs.Credentials,error)
 		CreateCredentials(cred dbs.Credentials)error
 		Login(req auth.Credentials) error
-		AddCC(cc dbs.CreditCards) error
+		AddCC(cc dbs.TableCreditCards) error
 		QueryEmailCC(email string)(dbs.CreditCards,error)
 		TopUpCC(cred dbs.CreditCards)error
 		GetCC()([]dbs.CreditCards,error)
@@ -41,7 +41,7 @@ func InitPostgre() PostgreInterface {
 	} else {
 		logrus.Printf("Init Postgre Success")
 	}
-	db.AutoMigrate(&models.ItemList{},&dbs.Credentials{},&dbs.CreditCards{})
+	db.AutoMigrate(&models.ItemList{},&dbs.TableCredentials{},&dbs.TableCreditCards{})
 
 	return &postgreDB{
 		postgre: db,

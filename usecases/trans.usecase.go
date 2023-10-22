@@ -18,7 +18,7 @@ import (
 
 
 func (uc *usecase)AddCC(req models.ReqCC)error{
-	cc:=trans.CreditCards{}
+	cc:=trans.TableCreditCards{}
 	cred,err:=uc.postgre.QueryEmailCC(req.Email)
 	if err!=nil{
 		return errors.New(constants.ERROR_DB)

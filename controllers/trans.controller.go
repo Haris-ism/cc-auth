@@ -18,7 +18,7 @@ func (c *controller)AddCC(ctx *gin.Context){
 	if err:=ctx.BindJSON(&req);err!=nil{
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
-		ctx.JSON(http.StatusBadRequest,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 
@@ -26,10 +26,10 @@ func (c *controller)AddCC(ctx *gin.Context){
 	if err!=nil{
 		res.Message=err.Error()
 		res.Code=http.StatusInternalServerError
-		ctx.JSON(http.StatusInternalServerError,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
-	ctx.JSON(http.StatusOK,res)
+	ctx.JSON(res.Code,res)
 }
 
 func (c *controller)TopUpCC(ctx *gin.Context){
@@ -42,7 +42,7 @@ func (c *controller)TopUpCC(ctx *gin.Context){
 	if err:=ctx.BindJSON(&req);err!=nil{
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
-		ctx.JSON(http.StatusBadRequest,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 
@@ -50,10 +50,10 @@ func (c *controller)TopUpCC(ctx *gin.Context){
 	if err!=nil{
 		res.Message=err.Error()
 		res.Code=http.StatusInternalServerError
-		ctx.JSON(http.StatusInternalServerError,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
-	ctx.JSON(http.StatusOK,res)
+	ctx.JSON(res.Code,res)
 }
 
 func (c *controller)GetCC(ctx *gin.Context){
@@ -66,11 +66,11 @@ func (c *controller)GetCC(ctx *gin.Context){
 	if err!=nil{
 		res.Message=err.Error()
 		res.Code=http.StatusInternalServerError
-		ctx.JSON(http.StatusInternalServerError,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 	res.Data=cred
-	ctx.JSON(http.StatusOK,res)
+	ctx.JSON(res.Code,res)
 }
 
 func (c *controller)TransItem(ctx *gin.Context){
@@ -83,7 +83,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 	if err:=ctx.BindJSON(&req);err!=nil{
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
-		ctx.JSON(http.StatusBadRequest,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 
@@ -91,7 +91,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 	if err!=nil{
 		res.Message=err.Error()
 		res.Code=http.StatusInternalServerError
-		ctx.JSON(http.StatusInternalServerError,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 	res.Data=data

@@ -19,7 +19,7 @@ func (c *controller)InquiryItems(ctx *gin.Context){
 		res.Code=http.StatusInternalServerError
 	}
 	res.Data=result
-	ctx.JSON(http.StatusOK,res)
+	ctx.JSON(res.Code,res)
 }
 func (c *controller)InquiryDiscounts(ctx *gin.Context){
 	res:=models.GeneralResponse{
@@ -32,5 +32,5 @@ func (c *controller)InquiryDiscounts(ctx *gin.Context){
 		res.Code=http.StatusInternalServerError
 	}
 	res.Data=result
-	ctx.JSON(http.StatusOK,res)
+	ctx.JSON(res.Code,res)
 }

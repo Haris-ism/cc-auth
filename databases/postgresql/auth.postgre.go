@@ -37,7 +37,7 @@ func (dbs *postgreDB) Login(req models.Credentials) error{
 	return nil
 }
 
-func (db *postgreDB)AddCC(cc dbs.CreditCards)error{
+func (db *postgreDB)AddCC(cc dbs.TableCreditCards)error{
 	err:=db.postgre.Create(&cc).Error
 	if err!=nil{
 		return err

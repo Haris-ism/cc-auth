@@ -26,7 +26,7 @@ func (c *controller) Register(ctx *gin.Context) {
 	if err:=c.usecase.Register(req);err!=nil{
 		res.Message=err.Error()
 		res.Code=http.StatusBadGateway
-		ctx.JSON(http.StatusBadRequest,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 
@@ -43,7 +43,7 @@ func (c *controller)Login(ctx *gin.Context){
 	if err:=ctx.BindJSON(&req);err!=nil{
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
-		ctx.JSON(http.StatusBadRequest,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 
@@ -52,12 +52,12 @@ func (c *controller)Login(ctx *gin.Context){
 	if err!=nil{
 		res.Message=err.Error()
 		res.Code=http.StatusInternalServerError
-		ctx.JSON(http.StatusInternalServerError,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
 
 	res.Data=token
-	ctx.JSON(http.StatusOK,res)
+	ctx.JSON(res.Code,res)
 }
 
 func (c *controller)DelCC(ctx *gin.Context){
@@ -70,8 +70,8 @@ func (c *controller)DelCC(ctx *gin.Context){
 	if err!=nil{
 		res.Message=err.Error()
 		res.Code=http.StatusBadRequest
-		ctx.JSON(http.StatusBadRequest,res)
+		ctx.JSON(res.Code,res)
 		return
 	}
-	ctx.JSON(http.StatusOK,res)
+	ctx.JSON(res.Code,res)
 }
