@@ -21,12 +21,20 @@ type(
 	}
 	CallbackInterface interface{
 		InquiryItems()(*merchant.InquiryMerchantItemsModel,error)
+		InquiryDiscounts()(*merchant.InquiryMerchantDiscountsModel,error)
 	}
 )
 
 func (g *callbackGrpc)InquiryItems()(*merchant.InquiryMerchantItemsModel,error){
-	fmt.Println("inquiry")
 	res,err:=g.callbackConn.InquiryItems(context.Background(),&emptypb.Empty{})
+	if err != nil {
+		log.Println("Error on grpc callback :", err)
+	}
+	return res,nil
+}
+func (g *callbackGrpc)InquiryDiscounts()(*merchant.InquiryMerchantDiscountsModel,error){
+	fmt.Println("inquiry")
+	res,err:=g.callbackConn.InquiryDiscounts(context.Background(),&emptypb.Empty{})
 	if err != nil {
 		log.Println("Error on grpc callback :", err)
 	}
