@@ -4,7 +4,6 @@ import (
 	"cc-auth/protogen/merchant"
 	"cc-auth/utils"
 	"context"
-	"fmt"
 	"log"
 
 	"google.golang.org/grpc"
@@ -33,7 +32,6 @@ func (g *callbackGrpc)InquiryItems()(*merchant.InquiryMerchantItemsModel,error){
 	return res,nil
 }
 func (g *callbackGrpc)InquiryDiscounts()(*merchant.InquiryMerchantDiscountsModel,error){
-	fmt.Println("inquiry")
 	res,err:=g.callbackConn.InquiryDiscounts(context.Background(),&emptypb.Empty{})
 	if err != nil {
 		log.Println("Error on grpc callback :", err)
@@ -46,11 +44,11 @@ func InitGrpcCallback()CallbackInterface{
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	conn, err := grpc.Dial(utils.GetEnv("CALLBACK_HOST_GRPC"),opts...)
 	if err!=nil{
-		fmt.Println("failed to dial grpc callback:",err)
+		log.Println("failed to dial grpc callback:",err)
 	}
 	
 	callbackConn:=merchant.NewInquiryServicesClient(conn)
-	fmt.Println("grpc callback connected")
+	log.Println("grpc callback connected")
 	return &callbackGrpc{
 		callbackConn:callbackConn,
 		// callbackHost:utils.GetEnv("CALLBACK_HOST"),

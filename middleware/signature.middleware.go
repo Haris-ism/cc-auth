@@ -30,9 +30,9 @@ func SignatureValidation(ctx *gin.Context){
 func Signature(req string,ts string)string{
 	key:=utils.GetEnv("SIG_KEY")
 	data:=req+"&"+ts+"&"+key
-	fmt.Println("data:",data)
+	// fmt.Println("data:",data)
 	res:=HashSha512(key,data)
-	fmt.Println("res:",res)
+	// fmt.Println("res:",res)
 	return res
 }
 func HashSha512(secret, data string) string {

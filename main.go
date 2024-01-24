@@ -6,6 +6,7 @@ import (
 	redis_db "cc-auth/databases/redis"
 	grpcClient "cc-auth/grpc/client"
 	grpcCallback "cc-auth/grpc/client/callback"
+	grpcTransaction "cc-auth/grpc/client/transaction"
 	host "cc-auth/hosts"
 	"cc-auth/hosts/callback"
 	"cc-auth/hosts/transaction"
@@ -20,7 +21,8 @@ func main() {
 	callback:=callback.InitCallback()
 	transaction:=transaction.InitTransaction()
 	callbackGrpc:=grpcCallback.InitGrpcCallback()
-	hostGrpc:=grpcClient.InitGrpcClient(callbackGrpc)
+	transactionGrpc:=grpcTransaction.InitGrpcTransaction()
+	hostGrpc:=grpcClient.InitGrpcClient(callbackGrpc,transactionGrpc)
 	host:=host.InitHost(callback,transaction)
 	uc := usecase.InitUsecase(postgre, redis,host,hostGrpc)
 	con := controller.InitController(uc)

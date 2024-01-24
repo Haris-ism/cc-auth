@@ -7,11 +7,11 @@ import (
 	tModels "cc-auth/hosts/transaction/models"
 	"cc-auth/middleware"
 	"encoding/json"
+	"net/http"
 	"time"
 
 	"cc-auth/utils"
 	"errors"
-	"net/http"
 
 	"github.com/sirupsen/logrus"
 )
@@ -84,11 +84,13 @@ func (uc *usecase)GetCC()([]trans.CreditCards,error){
 func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,error){
 	timeStamp:=time.Now().Format("15:04:05")
 	result:=tModels.ResponseTransactionItems{}
-	req,err:=utils.EncryptTransItem(req)
+	encryptedReq,err:=utils.EncryptTransItem(req)
 	if err!=nil{
 		return result.Data, err
 	}
-	bytes,err:=json.Marshal(req)
+
+
+	bytes,err:=json.Marshal(encryptedReq)
 	if err!=nil{
 		return result.Data,err
 	}
@@ -99,7 +101,7 @@ func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,e
 	header.Add("Content-Type", "application/json")
 	header.Add("TimeStamp", timeStamp)
 	header.Add("Signature", signature)
-	res,bytes,err:=uc.host.Transaction().Send(constants.TRANSACTION_ITEMS,req,header)
+	res,bytes,err:=uc.host.Transaction().Send(constants.TRANSACTION_ITEMS,encryptedReq,header)
 	if err!=nil{
 		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
 	}
@@ -119,6 +121,23 @@ func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,e
 	}
 
 	return resp,nil
+
+	// timeStamp:=time.Now().Format("15:04:05")
+	// result:=tModels.ResponseTransactionItems{}
+	// req,err:=utils.EncryptTransItem(req)
+	// if err!=nil{
+	// 	return result.Data, err
+	// }
+	// bytes,err:=json.Marshal(req)
+	// if err!=nil{
+	// 	return result.Data,err
+	// }
+
+	// signature:=middleware.Signature(string(bytes),timeStamp)
+
+	// uc.hostGrpc.Transaction().TransItems(&req)
+
+	// return result,nil
 }
 
 
