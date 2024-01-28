@@ -13,10 +13,7 @@ import (
 
 type(
 	callbackGrpc struct{
-		callbackConn merchant.InquiryServicesClient
-		// callbackHost		string
-		// inquiryItems		string
-		// inquiryDiscounts	string
+		callbackConn merchant.MerchantServicesClient
 	}
 	CallbackInterface interface{
 		InquiryItems()(*merchant.InquiryMerchantItemsModel,error)
@@ -47,12 +44,9 @@ func InitGrpcCallback()CallbackInterface{
 		log.Println("failed to dial grpc callback:",err)
 	}
 	
-	callbackConn:=merchant.NewInquiryServicesClient(conn)
+	callbackConn:=merchant.NewMerchantServicesClient(conn)
 	log.Println("grpc callback connected")
 	return &callbackGrpc{
 		callbackConn:callbackConn,
-		// callbackHost:utils.GetEnv("CALLBACK_HOST"),
-		// inquiryItems: utils.GetEnv("CALLBACK_INQUIRY_ITEMS"),
-		// inquiryDiscounts: utils.GetEnv("CALLBACK_INQUIRY_DISCOUNTS"),
 	}
 }

@@ -32,7 +32,7 @@ func Signature(req string,ts string)string{
 	data:=req+"&"+ts+"&"+key
 	// fmt.Println("data:",data)
 	res:=HashSha512(key,data)
-	// fmt.Println("res:",res)
+	// fmt.Println("hash:",res)
 	return res
 }
 func HashSha512(secret, data string) string {

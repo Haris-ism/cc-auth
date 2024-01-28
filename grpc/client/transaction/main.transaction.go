@@ -12,19 +12,19 @@ import (
 
 type(
 	transactionGrpc struct{
-		transcationConn merchant.TransServicesClient
+		transcationConn merchant.MerchantServicesClient
 	}
 	TransactionInterface interface{
-		TransItems(req *merchant.ReqTransItems) (*merchant.ResMerchantTransModel, error)
-		// InquiryItems()(*merchant.InquiryMerchantItemsModel,error)
-		// InquiryDiscounts()(*merchant.InquiryMerchantDiscountsModel,error)
+		TransItems(ctx context.Context, req *merchant.ReqTransItemsModel)(*merchant.ResMerchantTransModel,error)
 	}
 )
 
-func (g *transactionGrpc)TransItems(req *merchant.ReqTransItems)(*merchant.ResMerchantTransModel,error){
-	res,err:=g.transcationConn.TransItems(context.Background(),req)
+func (g *transactionGrpc)TransItems(ctx context.Context, req *merchant.ReqTransItemsModel)(*merchant.ResMerchantTransModel,error){
+	res:=&merchant.ResMerchantTransModel{}
+	res,err:=g.transcationConn.TransItems(ctx,req)
 	if err != nil {
 		log.Println("Error on grpc trans :", err)
+		return res,err
 	}
 	return res,nil
 }
@@ -37,8 +37,9 @@ func InitGrpcTransaction()TransactionInterface{
 		log.Println("failed to dial grpc trans:",err)
 	}
 	
-	transactionConn:=merchant.NewTransServicesClient(conn)
+	transactionConn:=merchant.NewMerchantServicesClient(conn)
 	log.Println("grpc trans connected")
+
 	return &transactionGrpc{
 		transcationConn:transactionConn,
 	}

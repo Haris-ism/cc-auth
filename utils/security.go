@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"cc-auth/constants"
 	"cc-auth/hosts/transaction/models"
+	"cc-auth/protogen/merchant"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
@@ -109,6 +110,24 @@ func EncryptTransItem(req models.TransactionItems)(models.DecTransactionItems,er
 	res.Req=encrypted
 
 	return res,nil
+}
+
+func EncryptTransItemGrpc(req models.TransactionItems)(*merchant.ReqTransItemsModel,error){
+	res:=merchant.ReqTransItemsModel{}
+	// fmt.Println("req:",req)
+	bytes,err:=json.Marshal(req)
+	if err!=nil{
+		return &res,errors.New(constants.ERROR_DB)
+	}
+	chanReq:=make(chan string)
+
+	go EncryptFunc(string(bytes),chanReq)
+
+	encrypted:=<-chanReq
+	// fmt.Println("encrypted string:",encrypted)
+	res.Request=encrypted
+
+	return &res,nil
 }
 func DecryptTransItem(req models.DecTransactionItems)(models.TransactionItems,error){
 	res:=models.TransactionItems{}

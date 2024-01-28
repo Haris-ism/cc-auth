@@ -6,14 +6,15 @@ import (
 	trans "cc-auth/databases/postgresql/models"
 	tModels "cc-auth/hosts/transaction/models"
 	"cc-auth/middleware"
+	"context"
 	"encoding/json"
-	"net/http"
+	"log"
 	"time"
 
 	"cc-auth/utils"
 	"errors"
 
-	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/metadata"
 )
 
 
@@ -83,61 +84,37 @@ func (uc *usecase)GetCC()([]trans.CreditCards,error){
 
 func (uc *usecase)TransItem(req tModels.TransactionItems)(tModels.DecTransItem,error){
 	timeStamp:=time.Now().Format("15:04:05")
-	result:=tModels.ResponseTransactionItems{}
-	encryptedReq,err:=utils.EncryptTransItem(req)
+	result:=tModels.DecTransItem{}
+	encryptedReq,err:=utils.EncryptTransItemGrpc(req)
 	if err!=nil{
-		return result.Data, err
+		log.Println("error encrypt:",err)
+		return result, err
 	}
-
 
 	bytes,err:=json.Marshal(encryptedReq)
 	if err!=nil{
-		return result.Data,err
+		log.Println("error marshal:",bytes)
+		return result,err
 	}
 
 	signature:=middleware.Signature(string(bytes),timeStamp)
-	header := make(http.Header)
-	header.Add("Accept", "*/*")
-	header.Add("Content-Type", "application/json")
-	header.Add("TimeStamp", timeStamp)
-	header.Add("Signature", signature)
-	res,bytes,err:=uc.host.Transaction().Send(constants.TRANSACTION_ITEMS,encryptedReq,header)
-	if err!=nil{
-		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
+	meta:=map[string]string{
+		"timestamp":timeStamp,
+		"signature":signature,
 	}
-	
-	resHost:=tModels.ResHostTransactionItems{}
-	err=json.Unmarshal(bytes,&resHost)
+	md := metadata.New(meta)
+	ctx:=metadata.NewOutgoingContext(context.Background(),md)
+	res,err:=uc.hostGrpc.Transaction().TransItems(ctx,encryptedReq)
 	if err!=nil{
-		return result.Data, errors.New(constants.ERROR_REQUEST_FAILED)
+		log.Println("err grpc req:",res)
+		return result, err
 	}
-	if res.StatusCode!=200{
-		return result.Data, errors.New(resHost.Message)
-	}
-	resp,err:=utils.DecryptTransItemRes(resHost.Data)
+
+	resp,err:=utils.DecryptTransItemRes(res.Data)
 	if err!=nil{
-		logrus.Error(err)
-		return result.Data, err
+		log.Println("err decrypt:",err)
+		return result, err
 	}
 
 	return resp,nil
-
-	// timeStamp:=time.Now().Format("15:04:05")
-	// result:=tModels.ResponseTransactionItems{}
-	// req,err:=utils.EncryptTransItem(req)
-	// if err!=nil{
-	// 	return result.Data, err
-	// }
-	// bytes,err:=json.Marshal(req)
-	// if err!=nil{
-	// 	return result.Data,err
-	// }
-
-	// signature:=middleware.Signature(string(bytes),timeStamp)
-
-	// uc.hostGrpc.Transaction().TransItems(&req)
-
-	// return result,nil
 }
-
-
